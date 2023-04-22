@@ -5,17 +5,11 @@ __all__ = ["MyBanner"]
 from manim import *
 
 class MyBanner(VGroup):
-    def __init__(self ):
+    def __init__(self, banner_title : str = '$Welcome\;to\;\mathbb{M}ath$\;tutorial\;!' ):
         super().__init__()
-
-        logo_bk_color = "#2C3E50"
-        self.banner(logo_bk_color, '$Welcome\;to\;\mathbb{M}ath$\;tutorial\;!')
+        self.banner(banner_title)
         
-    def set_camera_bk_color(self, color):
-        self.camera.background_color = color
-
-    def create_logo(self, bk_color):
-        logo_black = bk_color
+    def create_logo(self):
         circle = Circle().shift(LEFT)
         circle1 = circle.copy()
         circle1.next_to(circle)
@@ -41,8 +35,8 @@ class MyBanner(VGroup):
             letter.set_color(random_bright_color()) 
         return ds_m      
 
-    def banner(self,bk_color,banner_text):
-        self.sym_grp = self.create_logo(bk_color)
+    def banner(self,banner_text):
+        self.sym_grp = self.create_logo()
         self.ds_m = self.create_text(banner_text)
         self.ds_m.shift(DOWN * 2)
         logo = VGroup(self.sym_grp, self.ds_m)
@@ -61,5 +55,3 @@ class MyBanner(VGroup):
             Write(self.ds_m),
             lag_ratio=0.1,
         )    
-
-   

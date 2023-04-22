@@ -7,17 +7,13 @@ import MyBanner
 
 class MyBannerDemo(VoiceoverScene):
     def construct(self):
-        # You can choose from a multitude of TTS services,
+       # You can choose from a multitude of TTS services,
         # or in this example, record your own voice:
         self.set_speech_service(GTTSService())
          #self.set_speech_service(RecorderService())
-        banner = MyBanner.MyBanner() 
-        V_Title = "Fraction" 
-        title = Title(f"Math Tutorial : {V_Title}")
-        self.play(Create(banner))
-        self.play(Unwrite(banner))
+        banner = MyBanner.MyBanner("$\mathbb{F}$ractions\;in\;5\;minitues\;!") 
         with self.voiceover(text="Welcome to Math Learning.") as tracker:
-            self.play(Write(banner.create_text("Fraction")))
-            self.wait(2)
+           self.play(Create(banner))
+           self.wait(2)
         
     
