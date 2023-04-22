@@ -1,6 +1,6 @@
 from manim import *
 
-class MyBanner(Scene):
+class MyBannerScene(Scene):
     def construct(self):
         logo_bk_color = "#2C3E50"
         self.set_camera_bk_color(logo_bk_color);
