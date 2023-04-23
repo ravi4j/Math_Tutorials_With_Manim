@@ -29,8 +29,8 @@ class MyBanner(VGroup):
         logo_grp = VGroup(top ,circle , circle1, eye_group)
         return logo_grp
 
-    def create_text(self, tex_string):
-        ds_m = Tex(tex_string).scale(3)
+    def create_text(self, tex_string, scale_value = 3):
+        ds_m = Tex(tex_string).scale(scale_value)
         for letter in ds_m[0]:
             letter.set_color(random_bright_color()) 
         return ds_m      

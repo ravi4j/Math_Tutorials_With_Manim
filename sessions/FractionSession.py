@@ -12,36 +12,65 @@ class FractionSession(VoiceoverScene):
       # or in this example, record your own voice:
       self.set_speech_service(GTTSService())
       #self.set_speech_service(RecorderService())
-      banner = common.MyBanner("$\mathbb{F}$ractions\;in\;5\;minutes\;!") 
-      with self.voiceover(text="Learn fractions in 5 minutes") as tracker:
+      banner = common.MyBanner("$Learn\;\mathbb{F}$raction\;in\;1\;minute\;!") 
+      with self.voiceover(text="Learn fractions in 1 minute") as tracker:
          self.play(Create(banner))
          self.wait(2)
        
       fraction_def_grp = self.fraction_def()
-      self.add(fraction_def_grp)
       with self.voiceover(text="Fractions represent parts of a whole") as tracker:
          self.play(Transform(banner, fraction_def_grp))
          self.add(fraction_def_grp)
          self.wait()
       
-      for i in [2 , 4 , 6 , 8 , 10]:
-         voice_txt = "Divided circle into" + str(i) + " equal parts"
-         with self.voiceover(text=voice_txt) as tracker:
-            self.create_circle_parts(i)
-            self.wait()
+      self.fraction_para()
 
+      for i in [2 , 4 , 6 , 8 , 10]:
+        self.create_circle_parts(i)
+                 
+      self.remove(fraction_def_grp)
+      self.end_para()
       self.wait()
 
    def fraction_def(self):  
       plane =  NumberPlane().set_opacity(0.2)
       fraction_def = MarkupText(
-         f'<span fgcolor="{RED}" underline="double" underline_color="green">Fractions</span> represents parts of a <span fgcolor="{YELLOW}">whole</span>',
+         f'A <span fgcolor="{RED}" underline="double" underline_color="green">fraction</span> is a part of a <span fgcolor="{YELLOW}">whole</span>',
          color=WHITE,
          font_size=34)
       fraction_def.shift(UP * 3) 
       fraction_def_grp = VGroup(plane , fraction_def)
       return fraction_def_grp
    
+   def fraction_para(self):
+      text1 = MarkupText(
+         f'The word <span fgcolor="{RED}" underline="double" underline_color="green">fraction</span> is derived from the Latin word <span fgcolor="{YELLOW}">"fractio"</span>'   ,
+         color=WHITE,font_size=34)
+      text2 = MarkupText(f'which means to <span fgcolor="{RED}" underline="double" underline_color="green">break</span>.',color=WHITE, font_size=34)
+      group1 = VGroup(text1, text2).arrange(DOWN)
+      with self.voiceover(text="The word fraction is derived from the Latin word fractio which means to break") as tracker:
+         self.play(Write(group1))
+         self.wait()
+      self.remove(group1)   
+      text3 =  MarkupText(
+         f'In Mathematics, <span fgcolor="{RED}" underline="double" underline_color="green">fractions</span> are represented as a numerical value,',
+         color=WHITE,font_size=34)  
+      text4 = MarkupText(f'which defines a part of a whole.',color=WHITE,font_size=34)
+      group2 = VGroup(text3, text4).arrange(DOWN)
+      with self.voiceover(text="In Mathematics, fractions are represented as a numerical value, which defines a part of a whole.") as tracker:
+         self.play(Write(group2))
+         self.wait()
+      self.remove(group2)
+      return
+
+   def end_para(self):
+      end_txt = Text("Thanks for watching !!!")
+      with self.voiceover(text="Thanks for watching. If you liked this video, make sure to subscribe for more!") as tracker:
+         self.add(end_txt)
+         self.wait()
+      return
+
+
    def create_circle_parts(self, parts = 4):
       PARTS = parts
       HALF_PARTS = int(PARTS/2)
@@ -73,10 +102,13 @@ class FractionSession(VoiceoverScene):
                          angle=PI/HALF_PARTS, 
                          fill_opacity=0.25, 
                          color=randon_color).set_stroke(color=randon_color , width = 5)
-      self.add(annularSector) 
-      self.wait()
+      voice_txt = "Circle divided into" + str(PARTS) + " equal parts. Out of" +  str(PARTS)  + "equal parts, we are referring to 1 part."
+      with self.voiceover(text=voice_txt) as tracker:
+         self.play(FadeIn(annularSector)) 
+         self.wait(4)
       # Remove
-      self.remove(annularSector,cirle_parts_label,divider_grp)
+      self.remove(circle,start_line,center,annularSector,cirle_parts_label,divider_grp)
+      return
    
      
     
