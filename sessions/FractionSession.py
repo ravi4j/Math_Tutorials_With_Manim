@@ -18,8 +18,11 @@ class FractionSession(VoiceoverScene):
          self.wait(2)
        
       fraction_def_grp = self.fraction_def()
+      collect_objects_to_remove = []
       with self.voiceover(text="Fractions represent parts of a whole") as tracker:
-         self.play(Transform(banner, fraction_def_grp))
+         to = Transform(banner, fraction_def_grp)
+         self.play(to)
+         collect_objects_to_remove.append(to)
          self.wait()
       
       self.fraction_para()
@@ -27,6 +30,8 @@ class FractionSession(VoiceoverScene):
         self.create_circle_parts(i)
                  
       self.remove(fraction_def_grp)
+      for to in collect_objects_to_remove:
+         self.remove(to)
       self.end_para()
       self.wait()
 
@@ -97,7 +102,7 @@ class FractionSession(VoiceoverScene):
             collect_mbojects.append(to)
             collect_mbojects.append(divider_copy)
       label = r"\frac{1}{" + str( PARTS) + "}"
-      cirle_parts_label = MathTex(label , color=random_bright_color() , font_size = 44)
+      cirle_parts_label = MathTex(label , color=random_bright_color(),font_size=int(ANGLE/2))
       annularSector = AnnularSector(inner_radius=0,
                          outer_radius=2, 
                          angle=PI/HALF_PARTS, 
