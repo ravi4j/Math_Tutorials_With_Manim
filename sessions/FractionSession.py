@@ -20,11 +20,9 @@ class FractionSession(VoiceoverScene):
       fraction_def_grp = self.fraction_def()
       with self.voiceover(text="Fractions represent parts of a whole") as tracker:
          self.play(Transform(banner, fraction_def_grp))
-         self.add(fraction_def_grp)
          self.wait()
       
       self.fraction_para()
-
       for i in [2 , 4 , 6 , 8 , 10]:
         self.create_circle_parts(i)
                  
@@ -78,36 +76,44 @@ class FractionSession(VoiceoverScene):
       ANGLE = 360/PARTS
       start_point = (-2,0,0)
       end_point = (2,0,0)
-      circle = Circle(radius=2,color=RED,fill_opacity=1)
-      circle.set_stroke(color=WHITE , width = 5)
-      start_line = Line(start_point,end_point)
+      circle = Circle(radius=2,color=random_bright_color(),fill_opacity=1)
+      circle.set_stroke(color=TEAL , width = 5)
+      start_line = Line(start_point,end_point , color = DARK_BROWN)
       copy = start_line.copy()
-      center = Dot()
+      center = Dot(color=DARK_BROWN)
       self.play(Create(circle))
       self.play(Create(center))
-      divider_grp = VGroup()
-      for i in range(HALF_PARTS):
-         divider = copy.rotate(angle=math.radians(ANGLE), about_point=copy.get_center())
-         to = Transform(start_line ,divider)
-         self.play(to)
-         divider_grp.add(divider.copy())
-         self.add(divider.copy()) 
-      label = r"\;=\;\frac{1}{" + str( PARTS) + "}"
-      randon_color = random_bright_color()
-      cirle_parts_label = MathTex(label , color=randon_color , font_size = 144)
-      cirle_parts_label.move_to(RIGHT * 4)
-      self.add(cirle_parts_label) 
+      divider_grp = VGroup(copy)
+      collect_mbojects = []
+      voice_txt = "Circle divided into" + str(PARTS) + " equal parts." 
+      with self.voiceover(text=voice_txt) as tracker:
+         for i in range(HALF_PARTS):
+            divider = copy.rotate(angle=math.radians(ANGLE), about_point=copy.get_center())
+            to = Transform(start_line ,divider)
+            self.play(to)
+            divider_copy = divider.copy()
+            self.add(divider_copy)
+            collect_mbojects.append(divider)
+            collect_mbojects.append(to)
+            collect_mbojects.append(divider_copy)
+      label = r"\frac{1}{" + str( PARTS) + "}"
+      cirle_parts_label = MathTex(label , color=random_bright_color() , font_size = 44)
       annularSector = AnnularSector(inner_radius=0,
                          outer_radius=2, 
                          angle=PI/HALF_PARTS, 
                          fill_opacity=0.25, 
-                         color=randon_color).set_stroke(color=randon_color , width = 5)
-      voice_txt = "Circle divided into" + str(PARTS) + " equal parts. Out of" +  str(PARTS)  + "equal parts, we are referring to 1 part."
+                         color=RED).set_stroke(color=GREEN , width = 5)
+      voice_txt = "Out of" +  str(PARTS)  + "equal parts, we are referring to 1 part."
       with self.voiceover(text=voice_txt) as tracker:
-         self.play(FadeIn(annularSector)) 
-         self.wait(4)
+         self.play(FadeIn(annularSector))
+         annularSector.move_to(RIGHT * 2 + UP * 1.5)
+         cirle_parts_label.move_to(annularSector.get_center())
+         self.add(cirle_parts_label) 
+         self.wait(8)
       # Remove
       self.remove(circle,start_line,center,annularSector,cirle_parts_label,divider_grp)
+      for line in collect_mbojects:
+         self.remove(line)
       return
    
      
